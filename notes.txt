@@ -1,0 +1,90 @@
+$ npm i express socket.io moment
+
+
+https://cdnjs.com/libraries/qs/6.9.2
+
+
+1.
+
+const path = require("path");
+
+const express = require("express");
+const app = express();
+
+app.use(express.static(path.join(__dirname, "public")));
+
+app.listen(3000, () => {
+    console.log("server is running on port 3000");
+});
+
+
+
+2.
+
+const http = require("http");
+const server = http.createServer(app);
+
+server.listen(3000, () => {
+    console.log("server is running on port 3000");
+});
+
+
+
+
+3.
+
+const socketio = require("socket.io");
+const io = socketio(server);
+
+io.on("connection", (socket) => {
+    console.log("New Web Socket Connection...");
+});
+
+
+in .html -> file
+  <script src="/socket.io/socket.io.js"></script>
+
+in .js  -> file
+   const socket = io();
+
+
+
+4.
+// server
+in .js -> file
+io.on("connection", (socket) => {
+    console.log("New Web Socket Connection...");
+    socket.emit("message", "Welcome to ChatCord!");
+});
+
+
+// client
+in .js  -> file
+socket.on("message", (message) => {
+    console.log(message);
+});
+
+
+
+
+5.
+
+1. on the same single client
+    socket.emit("message", "Welcome to ChatCord!");
+
+2. emit all client - except same cient
+    socket.broadcast.emit();
+
+3. all the client in general include same client
+    io.emit();
+
+
+
+
+
+6.
+
+socket.join(user.room)
+
+socket.broadcast.to(user.room).emit("message", formatMessage(botName, "A User Has joined the group !"));
+
